@@ -3,20 +3,26 @@ package com.koc.studai.ai;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
-import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.segment.TextSegment;
-import dev.langchain4j.memory.ChatMemory;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
-import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
 import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
+import dev.langchain4j.rag.content.injector.DefaultContentInjector;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
+
+import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
 
 @Configuration
 public class Config {
@@ -40,18 +46,12 @@ public class Config {
 		return model;
 	}
 
-//	@Bean
-//	ChatMemory getChatMemory() {
-//		return MessageWindowChatMemory.withMaxMessages(10);
-//	}
-
 	@Bean
 	EmbeddingStore<TextSegment> embeddingStore() {
-		PgVectorEmbeddingStore embeddingStore = PgVectorEmbeddingStore.builder()
-				.host(pgVectorDBProperties.getHost()).port(pgVectorDBProperties.getPort())
-				.user(pgVectorDBProperties.getUser()).password(pgVectorDBProperties.getPassword())
-				.database(pgVectorDBProperties.getDatabase()).table(pgVectorDBProperties.getTable())
-				.dimension(pgVectorDBProperties.getDimensionSize()).build();
+		PgVectorEmbeddingStore embeddingStore = PgVectorEmbeddingStore.builder().host(pgVectorDBProperties.getHost())
+				.port(pgVectorDBProperties.getPort()).user(pgVectorDBProperties.getUser())
+				.password(pgVectorDBProperties.getPassword()).database(pgVectorDBProperties.getDatabase())
+				.table(pgVectorDBProperties.getTable()).dimension(pgVectorDBProperties.getDimensionSize()).build();
 		return embeddingStore;
 	}
 
@@ -69,5 +69,44 @@ public class Config {
 				.documentSplitter(DocumentSplitters.recursive(1000, 200)).embeddingModel(embeddingModel)
 				.embeddingStore(embeddingStore).build();
 		return ingestor;
+	}
+
+	@Bean
+	RetrievalAugmentor retrievalAugmentor(ContentRetriever contentRetriever) {
+		RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+				.contentRetriever(contentRetriever)
+				.contentInjector(DefaultContentInjector.builder().build())
+				.build();
+		return retrievalAugmentor;
+	}
+
+	@Bean
+	ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
+		ContentRetriever retriever = EmbeddingStoreContentRetriever.builder().embeddingModel(embeddingModel)
+				.embeddingStore(embeddingStore).maxResults(5).minScore(0.6)
+//				.dynamicFilter(query -> {
+//					String userId = (String) query.metadata().chatMemoryId();
+//					return metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId);
+//				})
+				.build();
+		EmbeddingStoreLoggingRetriever retriever2 = new EmbeddingStoreLoggingRetriever(retriever);
+		return retriever2;
+	}
+
+	@Bean
+	@Primary
+	Assistant aiService(ChatLanguageModel chatLanguageModel, RetrievalAugmentor retrievalAugmentor) {
+		Assistant assistant = AiServices.builder(Assistant.class).retrievalAugmentor(retrievalAugmentor)
+				.chatLanguageModel(chatLanguageModel).build();
+		return assistant;
+	}
+	
+	@Bean
+	ConversationalRetrievalChain conversationalRetrievalChain(ChatLanguageModel model, RetrievalAugmentor retrievalAugmentor) {
+		ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
+				.chatLanguageModel(model)
+				.retrievalAugmentor(retrievalAugmentor)
+				.build();
+		return chain;
 	}
 }

@@ -12,6 +12,7 @@ import dev.langchain4j.data.document.Metadata;
 
 public class IntransitFile implements DocumentSource{
 	
+	public static final String USER_ID_META_KEY = "userId";
 	private MultipartFile file;
 	private String userId;
 	
@@ -36,7 +37,7 @@ public class IntransitFile implements DocumentSource{
 		}
 		metadata.put("fileName", originalFileName);
 		metadata.put("fileSize", Long.toString(file.getSize()));
-		metadata.put("userId", userId);
+		metadata.put(USER_ID_META_KEY, userId);
 		return Metadata.from(metadata);
 	}
 
