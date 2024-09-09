@@ -1,0 +1,73 @@
+package com.koc.studai.ai;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import dev.langchain4j.data.document.DocumentSplitter;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
+import dev.langchain4j.model.huggingface.HuggingFaceChatModel;
+import dev.langchain4j.model.huggingface.HuggingFaceEmbeddingModel;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
+
+@Configuration
+public class Config {
+
+	@Autowired
+	private HuggingFaceProperties hfProperties;
+	@Autowired
+	private GoogleGeminiProperties geminiProperties;
+	@Autowired
+	private PgVectorDBProperties pgVectorDBProperties;
+
+	@Bean
+	ChatLanguageModel huggingFaceChatLanguageModel() {
+//		HuggingFaceChatModel model = HuggingFaceChatModel.builder()
+//				.accessToken(hfProperties.getApiKey())
+//				.modelId(hfProperties.getModelId())
+//				.temperature(0.7)
+//				.build();
+		GoogleAiGeminiChatModel model = GoogleAiGeminiChatModel.builder().apiKey(geminiProperties.getApiKey())
+				.modelName(geminiProperties.getModelId()).temperature(0.5).build();
+		return model;
+	}
+
+//	@Bean
+//	ChatMemory getChatMemory() {
+//		return MessageWindowChatMemory.withMaxMessages(10);
+//	}
+
+	@Bean
+	EmbeddingStore<TextSegment> embeddingStore() {
+		PgVectorEmbeddingStore embeddingStore = PgVectorEmbeddingStore.builder()
+				.host(pgVectorDBProperties.getHost()).port(pgVectorDBProperties.getPort())
+				.user(pgVectorDBProperties.getUser()).password(pgVectorDBProperties.getPassword())
+				.database(pgVectorDBProperties.getDatabase()).table(pgVectorDBProperties.getTable())
+				.dimension(pgVectorDBProperties.getDimensionSize()).build();
+		return embeddingStore;
+	}
+
+	@Bean
+	EmbeddingModel embeddingModel() {
+		EmbeddingModel embeddingModel = HuggingFaceEmbeddingModel.builder().accessToken(hfProperties.getApiKey())
+				.modelId(hfProperties.getEmbeddingModelId()).waitForModel(true).build();
+		return embeddingModel;
+	}
+
+	@Bean
+	EmbeddingStoreIngestor embeddingStoreIngestor(EmbeddingModel embeddingModel,
+			EmbeddingStore<TextSegment> embeddingStore) {
+		EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
+				.documentSplitter(DocumentSplitters.recursive(1000, 200)).embeddingModel(embeddingModel)
+				.embeddingStore(embeddingStore).build();
+		return ingestor;
+	}
+}
