@@ -84,10 +84,10 @@ public class Config {
 	ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
 		ContentRetriever retriever = EmbeddingStoreContentRetriever.builder().embeddingModel(embeddingModel)
 				.embeddingStore(embeddingStore).maxResults(5).minScore(0.6)
-//				.dynamicFilter(query -> {
-//					String userId = (String) query.metadata().chatMemoryId();
-//					return metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId);
-//				})
+				.dynamicFilter(query -> {
+					String userId = (String) query.metadata().chatMemoryId();
+					return metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId);
+				})
 				.build();
 		EmbeddingStoreLoggingRetriever retriever2 = new EmbeddingStoreLoggingRetriever(retriever);
 		return retriever2;

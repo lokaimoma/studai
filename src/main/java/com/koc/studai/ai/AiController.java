@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.DocumentLoader;
 import dev.langchain4j.data.document.DocumentParser;
@@ -22,19 +21,19 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 @RestController
 @RequestMapping("/api/ai")
 public class AiController {
-	private final ConversationalRetrievalChain chain;
+	private final Assistant assistant;
 	private final EmbeddingStoreIngestor embeddingStoreIngestor;
 	
 	
-	public AiController(ConversationalRetrievalChain chain, EmbeddingStoreIngestor embeddingStoreIngestor) {
-		this.chain = chain;
+	public AiController(Assistant assistant, EmbeddingStoreIngestor embeddingStoreIngestor) {
+		this.assistant = assistant;
 		this.embeddingStoreIngestor = embeddingStoreIngestor;
 	}
 
 
 	@PostMapping
 	public String chat(@RequestBody ChatPayload chat) {
-		return chain.execute(chat.getMessage());
+		return assistant.chat(chat.getUserId(), chat.getMessage());
 	}
 	
 	@PostMapping(path="/uploadDocuments", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
