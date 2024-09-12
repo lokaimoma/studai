@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { FeatherModule } from 'angular-feather';
-import { Upload, Sun, PlusSquare, Book } from 'angular-feather/icons';
+import { Upload, Sun, PlusSquare, Book, Send } from 'angular-feather/icons';
 
-const icons = { Upload, Sun, PlusSquare, Book };
+const icons = { Upload, Sun, PlusSquare, Book, Send };
 
 @NgModule({
   imports: [FeatherModule.pick(icons)],
