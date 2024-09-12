@@ -6,6 +6,5 @@ import { IconsModule } from '../../../../../../icons/icons.module';
   standalone: true,
   imports: [IconsModule],
   templateUrl: './chat-controls.component.html',
-  styleUrl: './chat-controls.component.css',
 })
 export class ChatControlsComponent {}

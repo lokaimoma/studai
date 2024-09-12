@@ -20,6 +20,5 @@ import { ChatControlsComponent } from './components/chat-controls/chat-controls.
     ChatControlsComponent,
   ],
   templateUrl: './chat-section.component.html',
-  styleUrl: './chat-section.component.css',
 })
 export class ChatSectionComponent {}

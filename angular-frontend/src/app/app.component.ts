@@ -14,7 +14,6 @@ import { WorkspaceComponent } from './routes/workspace/workspace.component';
     WorkspaceComponent,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'angular-frontend';

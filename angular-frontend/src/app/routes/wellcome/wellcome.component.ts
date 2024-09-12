@@ -7,6 +7,5 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
   standalone: true,
   imports: [IconsModule, HlmButtonDirective],
   templateUrl: './wellcome.component.html',
-  styleUrl: './wellcome.component.css',
 })
 export class WellcomeComponent {}

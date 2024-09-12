@@ -7,6 +7,5 @@ import { ChatSectionComponent } from './components/chat-section/chat-section.com
   standalone: true,
   imports: [SourceboardComponent, ChatSectionComponent],
   templateUrl: './workspace.component.html',
-  styleUrl: './workspace.component.css',
 })
 export class WorkspaceComponent {}

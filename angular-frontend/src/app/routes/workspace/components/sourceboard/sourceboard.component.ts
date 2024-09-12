@@ -8,6 +8,5 @@ import { SourceComponent } from './components/source/source.component';
   standalone: true,
   imports: [IconsModule, HlmCheckboxComponent, SourceComponent],
   templateUrl: './sourceboard.component.html',
-  styleUrl: './sourceboard.component.css',
 })
 export class SourceboardComponent {}

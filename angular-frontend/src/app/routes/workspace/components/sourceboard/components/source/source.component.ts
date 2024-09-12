@@ -7,7 +7,6 @@ import { HlmCheckboxComponent } from '@spartan-ng/ui-checkbox-helm';
   standalone: true,
   imports: [IconsModule, HlmCheckboxComponent],
   templateUrl: './source.component.html',
-  styleUrl: './source.component.css',
 })
 export class SourceComponent {
   @Input({ required: true }) title: string = '';
