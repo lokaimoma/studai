@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IconsModule } from '../../../icons/icons.module';
+import { IconsModule } from '../../icons/icons.module';
 
 @Component({
   selector: 'app-navbar',
