@@ -39,6 +39,9 @@
       ],
       "@spartan-ng/ui-formfield-helm": [
         ".\\components/ui-formfield-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-alert-helm": [
+        ".\\components/ui-alert-helm/src/index.ts"
       ]
     }
   },
