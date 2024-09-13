@@ -21,6 +21,14 @@ class Result<T> {
     }
     return false;
   }
+
+  getError(): string | undefined {
+    return this.error;
+  }
+
+  getData(): T | undefined {
+    return this.data;
+  }
 }
 
 export type { Workspace };

@@ -39,6 +39,7 @@ export class AiService {
   private handleAPIError(
     error: HttpErrorResponse
   ): Observable<Result<Workspace>> {
+    console.error('REQUEST ERROR: ', error);
     let errorPrefix;
     if (error.status === HttpStatusCode.InternalServerError) {
       errorPrefix = 'Server failed to process request';

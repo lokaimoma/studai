@@ -1,4 +1,4 @@
-<div class="grid place-content-center gap-10">
+<div class="grid place-content-center gap-10 mt-4">
   <div
     class="bg-zinc-400 w-[300px] h-[100px] mx-auto flex items-center justify-center"
   >
@@ -49,6 +49,30 @@
 
   <div class="mx-auto flex items-center flex-col gap-3">
     <p>What are you waiting for?</p>
-    <button class="rounded-full" hlmBtn>Create a workspace</button>
+    <button class="rounded-full" hlmBtn (click)="onCreateWorkspaceClicked()">
+      Create a workspace
+    </button>
   </div>
+
+  @if(creatingWorkspace) {
+  <div class="w-max" hlmAlert>
+    <i-feather name="clock" hlmAlertIcon class="animate-spin" />
+    <h4 hlmAlertTitle>Creating workspace</h4>
+    <p hlmAlertDescription>Please wait...</p>
+  </div>
+  } @if(errorOccured) {
+  <div class="w-max" variant="destructive" hlmAlert>
+    <i-feather name="alert-triangle" class="*:stroke-red-600" hlmAlertIcon />
+    <h4 hlmAlertTitle>Failed to create workspace</h4>
+    <p class="max-w-[30ch] text-justify" hlmAlertDescription>{{ error }}</p>
+  </div>
+  } @if(workspaceId) {
+  <div class="w-max text-green-500" hlmAlert>
+    <i-feather name="check-circle" class="*:stroke-green-500" hlmAlertIcon />
+    <h4 hlmAlertTitle>Successfully created workspace</h4>
+    <p class="max-w-[30ch] text-justify" hlmAlertDescription>
+      Page will redirect soon...
+    </p>
+  </div>
+  }
 </div>
