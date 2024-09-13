@@ -9,6 +9,7 @@ import {
   HlmAlertTitleDirective,
 } from '@spartan-ng/ui-alert-helm';
 import { HlmIconComponent } from '../../../../components/ui-icon-helm/src/lib/hlm-icon.component';
+import { Result, Workspace } from '../../types';
 
 @Component({
   selector: 'app-wellcome',
@@ -26,7 +27,7 @@ import { HlmIconComponent } from '../../../../components/ui-icon-helm/src/lib/hl
   templateUrl: './wellcome.component.html',
 })
 export class WellcomeComponent {
-  errorOccured: boolean = false;
+  errorOccurred: boolean = false;
   workspaceId: string | undefined;
   creatingWorkspace: boolean = false;
   error: string | undefined;
@@ -37,15 +38,17 @@ export class WellcomeComponent {
     this.creatingWorkspace = true;
     // to simulate a bit of latence
     setTimeout(() => {
-      this.aiService.createWorkSpace().subscribe((response) => {
-        this.creatingWorkspace = false;
-        if (response.isError()) {
-          this.errorOccured = true;
-          this.error = response.getError();
-          return;
-        }
-        this.errorOccured = false;
-        this.workspaceId = response.getData()?.id;
+      this.aiService.createWorkSpace().subscribe({
+        next: (response) => {
+          this.creatingWorkspace = false;
+          this.errorOccurred = false;
+          this.workspaceId = response.getData()?.id;
+        },
+        error: (error: Result<Workspace>) => {
+          this.creatingWorkspace = false;
+          this.errorOccurred = true;
+          this.error = error.getError();
+        },
       });
     }, 2000);
   }

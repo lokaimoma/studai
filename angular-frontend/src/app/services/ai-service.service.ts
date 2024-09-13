@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Result, Workspace } from '../types';
-import { catchError, map, Observable, retry, throwError } from 'rxjs';
+import { catchError, map, Observable, of, retry, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 
 const DEFAULT_WORKSPACE_TITLE = 'New workspace, click to edit title';
@@ -29,6 +29,10 @@ export class AiService {
 
     return request.pipe(
       map((workspace) => {
+        if (workspace instanceof Result) {
+          // error was caught
+          return workspace;
+        }
         const result = new Result<Workspace>();
         result.setData(workspace as unknown as Workspace);
         return result;
@@ -39,17 +43,14 @@ export class AiService {
   private handleAPIError(
     error: HttpErrorResponse
   ): Observable<Result<Workspace>> {
-    console.error('REQUEST ERROR: ', error);
     let errorPrefix;
     if (error.status === HttpStatusCode.InternalServerError) {
       errorPrefix = 'Server failed to process request';
     } else {
       errorPrefix = 'Request failed to go throw';
     }
-    return throwError(() => {
-      const result = new Result();
-      result.setError(`${errorPrefix} :${error.message}`);
-      return result;
-    });
+    const result = new Result<Workspace>();
+    result.setError(`${errorPrefix} : ${error.message}`);
+    return throwError(() => result);
   }
 }
