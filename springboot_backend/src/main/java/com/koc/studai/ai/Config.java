@@ -52,6 +52,7 @@ public class Config {
 				.port(pgVectorDBProperties.getPort()).user(pgVectorDBProperties.getUser())
 				.password(pgVectorDBProperties.getPassword()).database(pgVectorDBProperties.getDatabase())
 				.table(pgVectorDBProperties.getTable()).dimension(pgVectorDBProperties.getDimensionSize()).build();
+		
 		return embeddingStore;
 	}
 
