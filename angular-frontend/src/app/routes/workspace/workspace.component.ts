@@ -9,7 +9,10 @@ import { ChatSectionComponent } from './components/chat-section/chat-section.com
   templateUrl: './workspace.component.html',
 })
 export class WorkspaceComponent implements OnInit {
-  @Input({ required: true }) id: string = '';
+  loading: boolean = true;
+
+  @Input({ required: true })
+  set id(id: string) {}
 
   ngOnInit(): void {
     console.log(this.id);
