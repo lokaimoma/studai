@@ -25,31 +25,37 @@ export class AiService {
         },
         { headers: { 'Content-Type': 'application/json' } }
       )
-      .pipe(retry(2), catchError(this.handleAPIError));
+      .pipe(retry(2), catchError(AiService.handleAPIError<Workspace>));
 
-    return request.pipe(
-      map((workspace) => {
-        if (workspace instanceof Result) {
+    return AiService.getResultObservable<Workspace>(request);
+  }
+
+  public static getResultObservable<T>(
+    observable: Observable<T | Result<T>>
+  ): Observable<Result<T>> {
+    return observable.pipe(
+      map((payload) => {
+        if (payload instanceof Result) {
           // error was caught
-          return workspace;
+          return payload;
         }
-        const result = new Result<Workspace>();
-        result.setData(workspace as unknown as Workspace);
+        const result = new Result<T>();
+        result.setData(payload as unknown as T);
         return result;
       })
     );
   }
 
-  private handleAPIError(
+  public static handleAPIError<T>(
     error: HttpErrorResponse
-  ): Observable<Result<Workspace>> {
+  ): Observable<Result<T>> {
     let errorPrefix;
     if (error.status === HttpStatusCode.InternalServerError) {
       errorPrefix = 'Server failed to process request';
     } else {
       errorPrefix = 'Request failed to go throw';
     }
-    const result = new Result<Workspace>();
+    const result = new Result<T>();
     result.setError(`${errorPrefix} : ${error.message}`);
     return throwError(() => result);
   }

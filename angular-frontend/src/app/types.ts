@@ -5,7 +5,7 @@ type Workspace = {
 
 type Source = {
   name: string;
-  activated: boolean;
+  id: string;
 };
 
 type WorkspaceInfo = {
