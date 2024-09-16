@@ -11,6 +11,6 @@ export const routes: Routes = [
   {
     title: 'workspace',
     component: WorkspaceComponent,
-    path: 'workspace',
+    path: 'workspace/:id',
   },
 ];

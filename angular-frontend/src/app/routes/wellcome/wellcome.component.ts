@@ -10,6 +10,7 @@ import {
 } from '@spartan-ng/ui-alert-helm';
 import { HlmIconComponent } from '../../../../components/ui-icon-helm/src/lib/hlm-icon.component';
 import { Result, Workspace } from '../../types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-wellcome',
@@ -32,7 +33,7 @@ export class WellcomeComponent {
   creatingWorkspace: boolean = false;
   error: string | undefined;
 
-  constructor(private aiService: AiService) {}
+  constructor(private aiService: AiService, private router: Router) {}
 
   onCreateWorkspaceClicked() {
     this.creatingWorkspace = true;
@@ -48,6 +49,11 @@ export class WellcomeComponent {
           this.creatingWorkspace = false;
           this.errorOccurred = true;
           this.error = error.getError();
+        },
+        complete: () => {
+          setTimeout(() => {
+            this.router.navigate(['/workspace', this.workspaceId]);
+          }, 2000);
         },
       });
     }, 2000);
