@@ -3,6 +3,16 @@ type Workspace = {
   title: string;
 };
 
+type Source = {
+  name: string;
+  activated: boolean;
+};
+
+type WorkspaceInfo = {
+  title: string;
+  sources: Source[];
+};
+
 class Result<T> {
   private data: T | undefined;
   private error: string | undefined;
@@ -31,5 +41,5 @@ class Result<T> {
   }
 }
 
-export type { Workspace };
+export type { Workspace, WorkspaceInfo, Source };
 export { Result };
