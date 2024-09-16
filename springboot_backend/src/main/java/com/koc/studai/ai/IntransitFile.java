@@ -12,13 +12,17 @@ import dev.langchain4j.data.document.Metadata;
 
 public class IntransitFile implements DocumentSource{
 	
+	private static final String FILE_NAME_META_KEY = "fileName";
+	private static final String WORKSPACE_ID_META_KEY = "workspaceId";
 	public static final String USER_ID_META_KEY = "userId";
 	private MultipartFile file;
 	private String userId;
+	private String workspaceId;
 	
-	public IntransitFile(MultipartFile multipartFile, String userId) {
+	public IntransitFile(MultipartFile multipartFile, String userId, String workspaceId) {
 		this.file = multipartFile;
 		this.userId = userId;
+		this.workspaceId = workspaceId;
 	}
 
 	@Override
@@ -29,16 +33,22 @@ public class IntransitFile implements DocumentSource{
 	@Override
 	public Metadata metadata() {
 		Map<String, String> metadata = new HashedMap<>();
+		String originalFileName = getFileName();
+		metadata.put(FILE_NAME_META_KEY, originalFileName);
+		metadata.put("fileSize", Long.toString(file.getSize()));
+		metadata.put(WORKSPACE_ID_META_KEY, workspaceId);
+		metadata.put(USER_ID_META_KEY, userId);
+		return Metadata.from(metadata);
+	}
+	
+	public String getFileName() {
 		String originalFileName = file.getOriginalFilename();
 		if (originalFileName.contains("/")) {
 			originalFileName = originalFileName.substring(originalFileName.lastIndexOf('/') + 1);
 		}else if (originalFileName.contains("\\")) {
 				originalFileName = originalFileName.substring(originalFileName.lastIndexOf('\\') + 1);
 		}
-		metadata.put("fileName", originalFileName);
-		metadata.put("fileSize", Long.toString(file.getSize()));
-		metadata.put(USER_ID_META_KEY, userId);
-		return Metadata.from(metadata);
+		return originalFileName;
 	}
 
 }

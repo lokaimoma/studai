@@ -26,11 +26,9 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 public class WorkspaceController {
 	
 	private final WorkspaceService workspaceService;
-	private final EmbeddingStoreIngestor embeddingStoreIngestor;
 	
-	public WorkspaceController(WorkspaceService workspaceService, EmbeddingStoreIngestor embeddingStoreIngestor) {
+	public WorkspaceController(WorkspaceService workspaceService) {
 		this.workspaceService = workspaceService;
-		this.embeddingStoreIngestor = embeddingStoreIngestor;
 	}
 
 	@PostMapping
@@ -41,12 +39,9 @@ public class WorkspaceController {
 	
 	@PostMapping(path="/uploadDocuments", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<GenericResponse> uploadDocuments(@RequestParam(name = "documents") MultipartFile[] files,
-			@RequestParam(name = "workspaceId") String workspaceId) {
+			@RequestParam(name = "workspaceId") String workspaceId) throws WorkspaceNotFoundException {
+		String response = workspaceService.AddDocumentsToWorkSpace(workspaceId, files);
 		
-		DocumentParser parser = new ApacheTikaDocumentParser();
-		List<Document> documents = Arrays.stream(files).map(file -> new IntransitFile(file, "user-123"))
-		.map(documentSource -> DocumentLoader.load(documentSource, parser)).toList();
-		embeddingStoreIngestor.ingest(documents);
-		return ResponseEntity.ok(new GenericResponse("Document(s) uploaded successfully"));
+		return ResponseEntity.ok(new GenericResponse(response));
 	}
 }
