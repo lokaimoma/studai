@@ -7,18 +7,20 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-@Entity(name = "workpaces")
-public class Workspace {
+@Entity(name = "sources")
+public class Source {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	private String title;
+	private String name;
 	
-	public Workspace() {}
-
-	public Workspace(UUID id, String title) {
+	
+	public Source() {}
+	
+	public Source(UUID id, String name) {
+		super();
 		this.id = id;
-		this.title = title;
+		this.name = name;
 	}
 
 	public UUID getId() {
@@ -29,11 +31,13 @@ public class Workspace {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
+	
+	
 }

@@ -22,26 +22,15 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 @RequestMapping("/api/ai")
 public class AiController {
 	private final Assistant assistant;
-	private final EmbeddingStoreIngestor embeddingStoreIngestor;
 	
 	
-	public AiController(Assistant assistant, EmbeddingStoreIngestor embeddingStoreIngestor) {
+	public AiController(Assistant assistant) {
 		this.assistant = assistant;
-		this.embeddingStoreIngestor = embeddingStoreIngestor;
 	}
 
 
 	@PostMapping
 	public String chat(@RequestBody ChatPayload chat) {
 		return assistant.chat(chat.getUserId(), chat.getMessage());
-	}
-	
-	@PostMapping(path="/uploadDocuments", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<GenericResponse> uploadDocuments(@RequestParam(name = "documents") MultipartFile[] files) {
-		DocumentParser parser = new ApacheTikaDocumentParser();
-		List<Document> documents = Arrays.stream(files).map(file -> new IntransitFile(file, "user-123"))
-		.map(documentSource -> DocumentLoader.load(documentSource, parser)).toList();
-		embeddingStoreIngestor.ingest(documents);
-		return ResponseEntity.ok(new GenericResponse("Document(s) uploaded successfully"));
 	}
 }
