@@ -1,5 +1,6 @@
+@if (loading) { <app-loading-skeleton /> } @else {
 <div class="pt-2 px-4 grid grid-cols-[auto_1fr] gap-4">
-  @if (loading) {
-  <p>Loading...</p>
-  } @else {<app-sourceboard /> <app-chat-section />}
+  <app-sourceboard />
+  <app-chat-section />
 </div>
+}
