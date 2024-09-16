@@ -1,6 +1,8 @@
-@if (loading) { <app-loading-skeleton /> } @else {
+@if (loading) { <app-loading-skeleton /> } @else if(!errorOccurred) {
 <div class="pt-2 px-4 grid grid-cols-[auto_1fr] gap-4">
   <app-sourceboard />
   <app-chat-section />
 </div>
+} @if (errorOccurred) {
+<p class="text-destructive">{{ error }}</p>
 }

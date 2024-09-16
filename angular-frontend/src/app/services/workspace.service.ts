@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, retry } from 'rxjs';
+import { catchError, Observable, retry } from 'rxjs';
 import { Result, WorkspaceInfo } from '../types';
 import { environment } from '../../environments/environment.development';
 import { AiService } from './ai-service.service';
