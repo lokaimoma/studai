@@ -2,7 +2,6 @@ package com.koc.studai.workspace;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -28,20 +27,21 @@ public class WorkspaceService {
 		this.sourceRepository = sourceRepository;
 		this.embeddingStoreIngestor = embeddingStoreIngestor;
 	}
+	
+	public Workspace getWorkspace(String workspaceId) {
+		Workspace workspace = workspaceRepository.findById(UUID.fromString(workspaceId)).orElseThrow();
+		return workspace;
+	}
 
-	public Workspace AddWorkSpace(WorkspaceRequestPayload payload) {
+	public Workspace addWorkSpace(WorkspaceRequestPayload payload) {
 		Workspace workspace = new Workspace();
 		workspace.setTitle(payload.getTitle());
 		Workspace w = workspaceRepository.save(workspace);
 		return w;
 	}
 
-	public String AddDocumentsToWorkSpace(String workspaceId, MultipartFile[] files)
-			throws WorkspaceNotFoundException {
-		Optional<Workspace> workspace = workspaceRepository.findById(UUID.fromString(workspaceId));
-		if (workspace.isEmpty()) {
-			throw new WorkspaceNotFoundException();
-		}
+	public String addDocumentsToWorkSpace(String workspaceId, MultipartFile[] files) {
+		Workspace workspace = workspaceRepository.findById(UUID.fromString(workspaceId)).orElseThrow();
 
 		List<IntransitFile> intransitFiles = Arrays.stream(files)
 				.map(file -> new IntransitFile(file, "user-123", workspaceId)).toList();
@@ -49,7 +49,7 @@ public class WorkspaceService {
 		List<Source> sources = intransitFiles.stream().map(file -> {
 			Source source = new Source();
 			source.setName(file.getFileName());
-			source.setWorkspace(workspace.get());
+			source.setWorkspace(workspace);
 			return source;
 		}).toList();
 
