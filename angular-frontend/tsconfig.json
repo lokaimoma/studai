@@ -45,6 +45,9 @@
       ],
       "@spartan-ng/ui-skeleton-helm": [
         ".\\components/ui-skeleton-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-dialog-helm": [
+        ".\\components/ui-dialog-helm/src/index.ts"
       ]
     }
   },
