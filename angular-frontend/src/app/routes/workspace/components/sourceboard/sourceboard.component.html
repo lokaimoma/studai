@@ -1,9 +1,28 @@
 <aside class="w-[250px] shadow-md p-4 rounded-lg h-[80vh]">
   <div class="flex items-center justify-between">
     <h6 class="font-bold text-lg">Sources</h6>
-    <button variant="outline" size="icon" hlmBtn>
-      <i-feather name="plus-square" />
-    </button>
+    <hlm-dialog>
+      <button variant="outline" size="icon" brnDialogTrigger hlmBtn>
+        <i-feather name="plus-square" />
+      </button>
+
+      <hlm-dialog-content *brnDialogContent="let ctx">
+        <hlm-dialog-header>
+          <h3 hlmDialogTitle>Add Document(s)</h3>
+          <p hlmDialogDescription>
+            StudAI will return most important information from your document(s)
+            that corresponds to your queries
+          </p>
+        </hlm-dialog-header>
+        <input type="file" multiple hlmInput />
+        <hlm-dialog-footer>
+          <button variant="outline" hlmBtn>Upload</button>
+          <button variant="destructive" (click)="ctx.close()" hlmBtn>
+            Cancel
+          </button>
+        </hlm-dialog-footer>
+      </hlm-dialog-content>
+    </hlm-dialog>
   </div>
 
   <div class="mt-3 w-[98%] flex flex-col gap-4">

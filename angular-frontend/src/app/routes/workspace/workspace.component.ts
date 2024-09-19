@@ -43,6 +43,6 @@ export class WorkspaceComponent {
           console.error('ERROR', error, this.loading && !this.errorOccurred);
         },
       });
-    }, 2000);
+    }, 0);
   }
 }
