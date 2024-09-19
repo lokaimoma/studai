@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmFormFieldComponent } from '@spartan-ng/ui-formfield-helm';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
@@ -21,4 +21,6 @@ import { ChatControlsComponent } from './components/chat-controls/chat-controls.
   ],
   templateUrl: './chat-section.component.html',
 })
-export class ChatSectionComponent {}
+export class ChatSectionComponent {
+  @Input({ required: true }) workspaceTitle: string = '';
+}

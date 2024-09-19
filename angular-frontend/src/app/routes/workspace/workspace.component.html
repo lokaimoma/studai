@@ -1,7 +1,8 @@
-@if (loading) { <app-loading-skeleton /> } @else if(!errorOccurred) {
+@if (loading) { <app-loading-skeleton /> } @else if(!errorOccurred &&
+workspaceInfo) {
 <div class="pt-2 px-4 grid grid-cols-[auto_1fr] gap-4">
-  <app-sourceboard />
-  <app-chat-section />
+  <app-sourceboard [sources]="workspaceInfo.sources" />
+  <app-chat-section [workspaceTitle]="workspaceInfo.title" />
 </div>
 } @if (errorOccurred) {
 <p class="text-destructive">{{ error }}</p>

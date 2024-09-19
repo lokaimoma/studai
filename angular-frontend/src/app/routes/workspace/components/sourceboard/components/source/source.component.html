@@ -1,8 +1,5 @@
-<div class="flex justify-between items-center">
-  <div class="flex gap-2 items-center">
-    <i-feather name="book" />
-    <p class="font-semibold">{{ title }}</p>
-  </div>
-
-  <div><hlm-checkbox [checked]="checked" /></div>
+<div class="flex justify-between items-center gap-2">
+  <i-feather name="book" class="!h-fit" />
+  <p class="font-semibold truncate p-0">{{ name }}</p>
+  <hlm-checkbox [checked]="checked" />
 </div>
