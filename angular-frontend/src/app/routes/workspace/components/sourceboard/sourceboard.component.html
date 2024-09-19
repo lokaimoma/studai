@@ -14,13 +14,27 @@
             that corresponds to your queries
           </p>
         </hlm-dialog-header>
-        <input type="file" multiple hlmInput />
-        <hlm-dialog-footer>
-          <button variant="outline" hlmBtn>Upload</button>
-          <button variant="destructive" (click)="ctx.close()" hlmBtn>
-            Cancel
-          </button>
-        </hlm-dialog-footer>
+        <form>
+          <input
+            type="file"
+            multiple
+            hlmInput
+            (change)="onFilesSelected($event)"
+          />
+          <ul>
+            @for(file of files; track $index) {
+            <li>{{ file }}</li>
+            }
+          </ul>
+          <hlm-dialog-footer>
+            <button variant="outline" [disabled]="!enableUploadBtn" hlmBtn>
+              Upload
+            </button>
+            <button variant="destructive" (click)="ctx.close()" hlmBtn>
+              Cancel
+            </button>
+          </hlm-dialog-footer>
+        </form>
       </hlm-dialog-content>
     </hlm-dialog>
   </div>

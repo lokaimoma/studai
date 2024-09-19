@@ -41,5 +41,21 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
   templateUrl: './sourceboard.component.html',
 })
 export class SourceboardComponent {
+  files: string[] = [];
+  enableUploadBtn: boolean = false;
+
+  onFilesSelected(event: Event) {
+    const htmlInput = event?.target as HTMLInputElement;
+    this.files.splice(0, this.files.length);
+    Array.from(htmlInput.files ?? []).forEach((file) => {
+      this.files.push(file.name);
+    });
+    if (this.files.length > 0) {
+      this.enableUploadBtn = true;
+    } else {
+      this.enableUploadBtn = false;
+    }
+  }
+
   @Input({ required: true }) sources: Source[] = [];
 }
