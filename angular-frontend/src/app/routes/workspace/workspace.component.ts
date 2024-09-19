@@ -23,11 +23,13 @@ export class WorkspaceComponent {
   errorOccurred: boolean = false;
   error: string | undefined;
   workspaceInfo: WorkspaceInfo | undefined;
+  workspaceId: string = '';
 
   constructor(private workspaceService: WorkspaceService) {}
 
   @Input({ required: true })
   set id(id: string) {
+    this.workspaceId = id;
     // fetch info about the workspace (title, sources)
     setTimeout(() => {
       this.workspaceService.fetchWorkspaceInfo(id).subscribe({

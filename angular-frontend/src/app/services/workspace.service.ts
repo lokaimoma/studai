@@ -25,9 +25,10 @@ export class WorkspaceService {
     formdata: FormData
   ): Observable<Result<{ message: string }>> {
     const request = this.http
-      .post<{ message: string }>(`${environment.apiUrl}/workspace/`, formdata, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      .post<{ message: string }>(
+        `${environment.apiUrl}/workspace/uploadDocuments`,
+        formdata
+      )
       .pipe(
         retry(2),
         catchError(AiService.handleAPIError<{ message: string }>)
