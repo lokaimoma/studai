@@ -14,14 +14,17 @@
             that corresponds to your queries
           </p>
         </hlm-dialog-header>
-        <form>
+        <form class="flex items-start flex-col gap-2">
+          <p class="text-sm">
+            Press <kbd>CTRL</kbd> key to select multiple files
+          </p>
           <input
             type="file"
             multiple
             hlmInput
             (change)="onFilesSelected($event)"
           />
-          <ul>
+          <ul class="list-disc text-sm px-10">
             @for(file of files; track $index) {
             <li>{{ file }}</li>
             }
