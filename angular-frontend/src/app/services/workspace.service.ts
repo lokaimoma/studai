@@ -20,4 +20,19 @@ export class WorkspaceService {
 
     return AiService.getResultObservable<WorkspaceInfo>(request);
   }
+
+  public uploadDocuments(
+    formdata: FormData
+  ): Observable<Result<{ message: string }>> {
+    const request = this.http
+      .post<{ message: string }>(`${environment.apiUrl}/workspace/`, formdata, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .pipe(
+        retry(2),
+        catchError(AiService.handleAPIError<{ message: string }>)
+      );
+
+    return AiService.getResultObservable<{ message: string }>(request);
+  }
 }

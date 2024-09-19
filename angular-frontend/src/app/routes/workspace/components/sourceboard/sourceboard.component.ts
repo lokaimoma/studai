@@ -14,10 +14,12 @@ import {
   HlmDialogTitleDirective,
 } from '@spartan-ng/ui-dialog-helm';
 import {
+  BrnDialogCloseDirective,
   BrnDialogContentDirective,
   BrnDialogTriggerDirective,
 } from '@spartan-ng/ui-dialog-brain';
 import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sourceboard',
@@ -37,10 +39,14 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
     HlmInputDirective,
     BrnDialogTriggerDirective,
     BrnDialogContentDirective,
+    FormsModule,
   ],
   templateUrl: './sourceboard.component.html',
 })
 export class SourceboardComponent {
+  @Input({ required: true }) sources: Source[] = [];
+  @Input({ required: true }) workspaceId: string = '';
+  pendingUploads: string[] = [];
   files: string[] = [];
   enableUploadBtn: boolean = false;
 
@@ -57,5 +63,16 @@ export class SourceboardComponent {
     }
   }
 
-  @Input({ required: true }) sources: Source[] = [];
+  onDialogClose() {
+    this.files.splice(0, this.files.length);
+    this.enableUploadBtn = false;
+  }
+
+  onSubmitDocuments(event: Event) {
+    event.preventDefault();
+    this.pendingUploads.splice(0, this.pendingUploads.length);
+    const formdata = new FormData(event.target as HTMLFormElement);
+    formdata.append('workspaceId', this.workspaceId);
+    formdata.forEach((value, _) => this.pendingUploads.push(value.toString()));
+  }
 }

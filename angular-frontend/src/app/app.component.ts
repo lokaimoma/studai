@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { WellcomeComponent } from './routes/wellcome/wellcome.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { WorkspaceComponent } from './routes/workspace/workspace.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     WellcomeComponent,
     NavbarComponent,
     WorkspaceComponent,
-    ReactiveFormsModule,
   ],
   templateUrl: './app.component.html',
 })
