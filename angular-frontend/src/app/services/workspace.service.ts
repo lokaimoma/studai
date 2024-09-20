@@ -1,15 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, retry } from 'rxjs';
-import { Result, WorkspaceInfo } from '../types';
+import { Result, Workspace, WorkspaceInfo } from '../types';
 import { environment } from '../../environments/environment.development';
 import { AiService } from './ai-service.service';
+
+const DEFAULT_WORKSPACE_TITLE = 'New workspace, click to edit title';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WorkspaceService {
   constructor(private http: HttpClient) {}
+
+  createWorkSpace(): Observable<Result<Workspace>> {
+    const request = this.http
+      .post<Workspace>(
+        `${environment.apiUrl}/workspace`,
+        {
+          title: DEFAULT_WORKSPACE_TITLE,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .pipe(retry(2), catchError(AiService.handleAPIError<Workspace>));
+
+    return AiService.getResultObservable<Workspace>(request);
+  }
 
   public fetchWorkspaceInfo(
     workspaceId: string

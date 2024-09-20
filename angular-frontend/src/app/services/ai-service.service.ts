@@ -4,11 +4,9 @@ import {
   HttpStatusCode,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Result, Workspace } from '../types';
+import { ChatReqPayload, Result, Workspace } from '../types';
 import { catchError, map, Observable, of, retry, throwError } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-
-const DEFAULT_WORKSPACE_TITLE = 'New workspace, click to edit title';
 
 @Injectable({
   providedIn: 'root',
@@ -16,18 +14,14 @@ const DEFAULT_WORKSPACE_TITLE = 'New workspace, click to edit title';
 export class AiService {
   constructor(private http: HttpClient) {}
 
-  createWorkSpace(): Observable<Result<Workspace>> {
+  public chatWithAI(
+    chatReqPayload: ChatReqPayload
+  ): Observable<Result<String>> {
     const request = this.http
-      .post<Workspace>(
-        `${environment.apiUrl}/workspace`,
-        {
-          title: DEFAULT_WORKSPACE_TITLE,
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      .pipe(retry(2), catchError(AiService.handleAPIError<Workspace>));
+      .post<string>(`${environment.apiUrl}/ai`, JSON.stringify(chatReqPayload))
+      .pipe(retry(3), catchError(AiService.handleAPIError<string>));
 
-    return AiService.getResultObservable<Workspace>(request);
+    return AiService.getResultObservable<string>(request);
   }
 
   public static getResultObservable<T>(

@@ -13,6 +13,12 @@ type WorkspaceInfo = {
   sources: Source[];
 };
 
+type ChatReqPayload = {
+  workspaceId: string;
+  message: string;
+  userId: string;
+};
+
 class Result<T> {
   private data: T | undefined;
   private error: string | undefined;
@@ -41,5 +47,5 @@ class Result<T> {
   }
 }
 
-export type { Workspace, WorkspaceInfo, Source };
+export type { Workspace, WorkspaceInfo, Source, ChatReqPayload };
 export { Result };

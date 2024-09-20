@@ -11,6 +11,7 @@ import {
 import { HlmIconComponent } from '../../../../components/ui-icon-helm/src/lib/hlm-icon.component';
 import { Result, Workspace } from '../../types';
 import { Router } from '@angular/router';
+import { WorkspaceService } from '../../services/workspace.service';
 
 @Component({
   selector: 'app-wellcome',
@@ -33,13 +34,16 @@ export class WellcomeComponent {
   creatingWorkspace: boolean = false;
   error: string | undefined;
 
-  constructor(private aiService: AiService, private router: Router) {}
+  constructor(
+    private workspaceService: WorkspaceService,
+    private router: Router
+  ) {}
 
   onCreateWorkspaceClicked() {
     this.creatingWorkspace = true;
     // to simulate a bit of latence
     setTimeout(() => {
-      this.aiService.createWorkSpace().subscribe({
+      this.workspaceService.createWorkSpace().subscribe({
         next: (response) => {
           this.creatingWorkspace = false;
           this.errorOccurred = false;
