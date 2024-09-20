@@ -31,6 +31,6 @@ public class AiController {
 
 	@PostMapping
 	public String chat(@RequestBody ChatPayload chat) {
-		return assistant.chat(chat.getUserId(), chat.getMessage());
+		return assistant.chat(chat.getUserId() + Assistant.USERiD_WORKSPACEID_SEP + chat.getWorkspaceId(), chat.getMessage());
 	}
 }

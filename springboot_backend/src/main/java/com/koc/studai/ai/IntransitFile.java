@@ -12,8 +12,8 @@ import dev.langchain4j.data.document.Metadata;
 
 public class IntransitFile implements DocumentSource{
 	
-	private static final String FILE_NAME_META_KEY = "fileName";
-	private static final String WORKSPACE_ID_META_KEY = "workspaceId";
+	public static final String FILE_NAME_META_KEY = "fileName";
+	public static final String WORKSPACE_ID_META_KEY = "workspaceId";
 	public static final String USER_ID_META_KEY = "userId";
 	private MultipartFile file;
 	private String userId;

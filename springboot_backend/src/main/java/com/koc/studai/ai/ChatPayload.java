@@ -3,14 +3,10 @@ package com.koc.studai.ai;
 public class ChatPayload {
 	private String message;
 	private String userId;
+	private String workspaceId;
 	
 	public ChatPayload() {
 		
-	}
-
-	public ChatPayload(String message) {
-		super();
-		this.message = message;
 	}
 
 	public String getMessage() {
@@ -28,7 +24,12 @@ public class ChatPayload {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	
-	
+
+	public String getWorkspaceId() {
+		return workspaceId;
+	}
+
+	public void setWorkspaceId(String workspaceId) {
+		this.workspaceId = workspaceId;
+	}
 }

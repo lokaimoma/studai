@@ -1,5 +1,7 @@
 package com.koc.studai.ai;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -83,11 +85,23 @@ public class Config {
 
 	@Bean
 	ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
+		Logger log = LoggerFactory.getLogger(getClass());
 		ContentRetriever retriever = EmbeddingStoreContentRetriever.builder().embeddingModel(embeddingModel)
 				.embeddingStore(embeddingStore).maxResults(5).minScore(0.6)
 				.dynamicFilter(query -> {
-					String userId = (String) query.metadata().chatMemoryId();
+					String userIdWorkspaceId = (String) query.metadata().chatMemoryId();
+					log.info("userIdWOrkspaceID 1st query: " + userIdWorkspaceId);
+					String[] idParts = userIdWorkspaceId.split(Assistant.USERiD_WORKSPACEID_SEP);
+					String userId = idParts[0];
 					return metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId);
+				})
+				.dynamicFilter(query -> {
+					String userIdWorkspaceId = (String) query.metadata().chatMemoryId();
+					log.info("userIdWOrkspaceID: " + userIdWorkspaceId);
+					String[] idParts = userIdWorkspaceId.split(Assistant.USERiD_WORKSPACEID_SEP);
+					log.info("ID PARTS: " + idParts.length);
+					String workspaceId = idParts[1];
+					return metadataKey(IntransitFile.WORKSPACE_ID_META_KEY).isEqualTo(workspaceId);
 				})
 				.build();
 		EmbeddingStoreLoggingRetriever retriever2 = new EmbeddingStoreLoggingRetriever(retriever);
