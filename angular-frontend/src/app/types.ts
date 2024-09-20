@@ -19,6 +19,16 @@ type ChatReqPayload = {
   userId: string;
 };
 
+enum ChatEntity {
+  AI,
+  USER,
+}
+
+type Chat = {
+  entity: ChatEntity;
+  message: string;
+};
+
 class Result<T> {
   private data: T | undefined;
   private error: string | undefined;
@@ -47,5 +57,5 @@ class Result<T> {
   }
 }
 
-export type { Workspace, WorkspaceInfo, Source, ChatReqPayload };
-export { Result };
+export type { Workspace, WorkspaceInfo, Source, ChatReqPayload, Chat };
+export { Result, ChatEntity };

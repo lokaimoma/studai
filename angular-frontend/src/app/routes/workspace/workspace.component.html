@@ -5,7 +5,11 @@ workspaceInfo) {
     [sources]="workspaceInfo.sources"
     [workspaceId]="workspaceId"
   />
-  <app-chat-section [workspaceTitle]="workspaceInfo.title" />
+  <app-chat-section
+    (forwardQueryToAI)="onForwardQueryToAI($event)"
+    [workspaceTitle]="workspaceInfo.title"
+    [chats]="chats"
+  />
 </div>
 } @if (errorOccurred) {
 <p class="text-destructive">{{ error }}</p>

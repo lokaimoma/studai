@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { IconsModule } from '../../../../../../icons/icons.module';
 
 @Component({
@@ -7,4 +7,16 @@ import { IconsModule } from '../../../../../../icons/icons.module';
   imports: [IconsModule],
   templateUrl: './chat-controls.component.html',
 })
-export class ChatControlsComponent {}
+export class ChatControlsComponent {
+  query: string = '';
+  @Output() sendQueryEvent = new EventEmitter<string>();
+
+  onQueryInputChanged(event: Event) {
+    this.query = (event.target as HTMLInputElement).value;
+  }
+
+  emitChat() {
+    this.sendQueryEvent.emit(this.query);
+    this.query = '';
+  }
+}

@@ -16,9 +16,11 @@ export class AiService {
 
   public chatWithAI(
     chatReqPayload: ChatReqPayload
-  ): Observable<Result<String>> {
+  ): Observable<Result<string>> {
     const request = this.http
-      .post<string>(`${environment.apiUrl}/ai`, JSON.stringify(chatReqPayload))
+      .post(`${environment.apiUrl}/ai`, chatReqPayload, {
+        responseType: 'text',
+      })
       .pipe(retry(3), catchError(AiService.handleAPIError<string>));
 
     return AiService.getResultObservable<string>(request);

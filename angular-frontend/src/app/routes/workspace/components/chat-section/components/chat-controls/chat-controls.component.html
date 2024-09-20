@@ -5,10 +5,13 @@
     hlmInput
     placeholder="Query...."
     size="sm"
+    [value]="query"
+    (change)="onQueryInputChanged($event)"
     class="rounded focus-visible:ring-0 focus-visible:ring-offset-0 w-full border-none"
   />
   <button
     class="rounded-full grid place-content-center p-1 bg-primary text-primary-foreground"
+    (click)="emitChat()"
   >
     <i-feather name="send" />
   </button>
