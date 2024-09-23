@@ -3,61 +3,6 @@
 >
   <div class="flex items-center justify-between">
     <h6 class="font-bold text-lg">Sources</h6>
-    <hlm-dialog [closeOnBackdropClick]="false" (closed)="onDialogClose()">
-      <button variant="outline" size="icon" brnDialogTrigger hlmBtn>
-        <i-feather name="plus-square" />
-      </button>
-
-      <hlm-dialog-content *brnDialogContent="let ctx">
-        <hlm-dialog-header>
-          <h3 hlmDialogTitle>Add Document(s)</h3>
-          <p hlmDialogDescription>
-            StudAI will return most important information from your document(s)
-            that corresponds to your queries
-          </p>
-        </hlm-dialog-header>
-        <form
-          class="flex items-start flex-col gap-2"
-          (ngSubmit)="onSubmitDocuments($event)"
-          enctype="multipart/form-data"
-        >
-          <p class="text-sm">
-            Press <kbd>CTRL</kbd> key to select multiple files
-          </p>
-          <input
-            name="documents"
-            type="file"
-            multiple
-            hlmInput
-            (change)="onFilesSelected($event)"
-          />
-          <ul class="list-disc text-sm px-10">
-            @for(file of files; track $index) {
-            <li>{{ file }}</li>
-            }
-          </ul>
-          <hlm-dialog-footer class="self-end">
-            <button
-              variant="outline"
-              type="submit"
-              [disabled]="!enableUploadBtn"
-              (click)="ctx.close()"
-              hlmBtn
-            >
-              Upload
-            </button>
-            <button
-              variant="destructive"
-              (click)="ctx.close()"
-              type="button"
-              hlmBtn
-            >
-              Cancel
-            </button>
-          </hlm-dialog-footer>
-        </form>
-      </hlm-dialog-content>
-    </hlm-dialog>
   </div>
   @if(uploadErrorOccured && uploadError) {
   <p

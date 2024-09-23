@@ -1,24 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { IconsModule } from '../../../../icons/icons.module';
-import { HlmCheckboxComponent } from '@spartan-ng/ui-checkbox-helm';
 import { SourceComponent } from './components/source/source.component';
 import { Result, Source } from '../../../../types';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
-import {
-  HlmDialogCloseDirective,
-  HlmDialogComponent,
-  HlmDialogContentComponent,
-  HlmDialogDescriptionDirective,
-  HlmDialogFooterComponent,
-  HlmDialogHeaderComponent,
-  HlmDialogTitleDirective,
-} from '@spartan-ng/ui-dialog-helm';
-import {
-  BrnDialogCloseDirective,
-  BrnDialogContentDirective,
-  BrnDialogTriggerDirective,
-} from '@spartan-ng/ui-dialog-brain';
-import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { FormsModule } from '@angular/forms';
 import { AiService } from '../../../../services/ai-service.service';
 import { WorkspaceService } from '../../../../services/workspace.service';
@@ -28,19 +11,7 @@ import { WorkspaceService } from '../../../../services/workspace.service';
   standalone: true,
   imports: [
     IconsModule,
-    HlmCheckboxComponent,
     SourceComponent,
-    HlmButtonDirective,
-    HlmDialogComponent,
-    HlmDialogContentComponent,
-    HlmDialogDescriptionDirective,
-    HlmDialogCloseDirective,
-    HlmDialogHeaderComponent,
-    HlmDialogTitleDirective,
-    HlmDialogFooterComponent,
-    HlmInputDirective,
-    BrnDialogTriggerDirective,
-    BrnDialogContentDirective,
     FormsModule,
   ],
   templateUrl: './sourceboard.component.html',

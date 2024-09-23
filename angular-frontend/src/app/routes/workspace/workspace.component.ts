@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SourceboardComponent } from './components/sourceboard/sourceboard.component';
 import { ChatSectionComponent } from './components/chat-section/chat-section.component';
-import { HlmSkeletonComponent } from '@spartan-ng/ui-skeleton-helm';
 import { LoadingSkeletonComponent } from './components/loading-skeleton/loading-skeleton.component';
 import { WorkspaceService } from '../../services/workspace.service';
 import { Chat, ChatEntity, Result, WorkspaceInfo } from '../../types';
@@ -14,8 +13,7 @@ const DEFAULT_AI_RESPONSE = "AI didn't return any valid response";
   imports: [
     SourceboardComponent,
     ChatSectionComponent,
-    HlmSkeletonComponent,
-    LoadingSkeletonComponent,
+    LoadingSkeletonComponent
   ],
   templateUrl: './workspace.component.html',
 })

@@ -1,14 +1,6 @@
 import { Component } from '@angular/core';
 import { IconsModule } from '../../icons/icons.module';
-import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { AiService } from '../../services/ai-service.service';
-import {
-  HlmAlertDescriptionDirective,
-  HlmAlertDirective,
-  HlmAlertIconDirective,
-  HlmAlertTitleDirective,
-} from '@spartan-ng/ui-alert-helm';
-import { HlmIconComponent } from '../../../../components/ui-icon-helm/src/lib/hlm-icon.component';
 import { Result, Workspace } from '../../types';
 import { Router } from '@angular/router';
 import { WorkspaceService } from '../../services/workspace.service';
@@ -18,13 +10,6 @@ import { WorkspaceService } from '../../services/workspace.service';
   standalone: true,
   imports: [
     IconsModule,
-    HlmButtonDirective,
-    HlmAlertDirective,
-    HlmAlertIconDirective,
-    HlmAlertDescriptionDirective,
-    HlmAlertTitleDirective,
-    HlmIconComponent,
-    HlmIconComponent,
   ],
   templateUrl: './wellcome.component.html',
 })
