@@ -27,10 +27,12 @@
 		<tag />
 		<url />
 	</scm>
+
 	<properties>
 		<java.version>21</java.version>
 		<langchain4j.version>0.34.0</langchain4j.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
