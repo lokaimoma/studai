@@ -1,10 +1,9 @@
 package com.koc.studai.workspace;
 
-import java.util.Set;
 
 public class WorkspaceInfoResponsePayload {
 	private String title;
-	private Set<Source> sources;
+	private Iterable<Source> sources;
 	
 	public WorkspaceInfoResponsePayload() {}
 	
@@ -21,11 +20,11 @@ public class WorkspaceInfoResponsePayload {
 		this.title = title;
 	}
 
-	public Set<Source> getSources() {
+	public Iterable<Source> getSources() {
 		return sources;
 	}
 
-	public void setSources(Set<Source> sources) {
+	public void setSources(Iterable<Source> sources) {
 		this.sources = sources;
 	}
 }

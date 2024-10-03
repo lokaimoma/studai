@@ -19,8 +19,9 @@ async function Page({ params }: { params: { workspaceId: string } }) {
       </>
     )
   }
-  const workspaceInfo: WorkspacePayload = await response.json();
-
+  console.log(await response.text())
+  console.log("Headers", response.headers)
+  const workspaceInfo: WorkspacePayload = {title: "", sources: []};
 
   return (
     <div className="flex gap-7 flex-wrap">

@@ -5,8 +5,10 @@ import { uploadSources } from "../actions";
 import { AddSourceDialog } from "./AddSourceDialog";
 import { WorkspacePayload } from "../page";
 import { Source } from "@/app/actions/home";
+import { useToast } from "@/hooks/use-toast";
 
 export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: string, workspaceInfo: WorkspacePayload, }) {
+  const { toast } = useToast();
   const [_, startTransition] = useTransition();
   const [pendingFiles, setPendingFiles] = useState<string[]>([])
   const [fileUpdatePending, setFileUpdatePending] = useState(false)
@@ -20,6 +22,7 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
       uploadSources(formdata).then(function(result) {
         if (result.isError) {
           console.error("Request error", result.error)
+          toast({ description: result.error, title: "Failed to upload source(s)", variant: "destructive" })
           return;
         }
         if (result.data) {
