@@ -38,10 +38,10 @@ public class WorkspaceController {
 	}
 
 	@PostMapping(path = "/uploadDocuments", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-	public ResponseEntity<GenericResponse> uploadDocuments(@RequestParam(name = "documents") MultipartFile[] files,
+	public ResponseEntity<Iterable<Source>> uploadDocuments(@RequestParam(name = "documents") MultipartFile[] files,
 			@RequestParam(name = "workspaceId") String workspaceId) {
-		String response = workspaceService.addDocumentsToWorkSpace(workspaceId, files);
+		Iterable<Source> sources = workspaceService.addDocumentsToWorkSpace(workspaceId, files);
 
-		return ResponseEntity.ok(new GenericResponse(response));
+		return ResponseEntity.ok(sources);
 	}
 }

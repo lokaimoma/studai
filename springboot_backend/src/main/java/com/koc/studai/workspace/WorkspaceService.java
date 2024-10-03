@@ -40,7 +40,7 @@ public class WorkspaceService {
 		return w;
 	}
 
-	public String addDocumentsToWorkSpace(String workspaceId, MultipartFile[] files) {
+	public Iterable<Source> addDocumentsToWorkSpace(String workspaceId, MultipartFile[] files) {
 		Workspace workspace = workspaceRepository.findById(UUID.fromString(workspaceId)).orElseThrow();
 
 		List<IntransitFile> intransitFiles = Arrays.stream(files)
@@ -53,12 +53,12 @@ public class WorkspaceService {
 			return source;
 		}).toList();
 
-		sourceRepository.saveAll(sources);
+		Iterable<Source> savedSources = sourceRepository.saveAll(sources);
 
 		DocumentParser parser = new ApacheTikaDocumentParser();
 		List<Document> documents = intransitFiles.stream().map(file -> DocumentLoader.load(file, parser)).toList();
 		embeddingStoreIngestor.ingest(documents);
 
-		return "Document(s) saved successfully";
+		return savedSources;
 	}
 }

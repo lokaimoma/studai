@@ -4,18 +4,33 @@ import { useState, useTransition } from "react";
 import { uploadSources } from "../actions";
 import { AddSourceDialog } from "./AddSourceDialog";
 import { WorkspacePayload } from "../page";
+import { Source } from "@/app/actions/home";
 
 export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: string, workspaceInfo: WorkspacePayload, }) {
-  const [pending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
   const [pendingFiles, setPendingFiles] = useState<string[]>([])
+  const [fileUpdatePending, setFileUpdatePending] = useState(false)
+  const [sources, setSources] = useState<Source[]>(workspaceInfo.sources)
 
   function onUploadSources(formdata: FormData) {
     startTransition(async function() {
       const documents = formdata.getAll("documents") as File[]
       setPendingFiles(documents.map(file => file.name))
-      const result = await uploadSources(formdata);
-      console.error("Request error", result.error)
-      console.log("Request data", result.data)
+      setFileUpdatePending(true)
+      uploadSources(formdata).then(function(result) {
+        if (result.isError) {
+          console.error("Request error", result.error)
+          return;
+        }
+        if (result.data) {
+          const newSources = [...result.data, ...sources]
+          setSources(newSources)
+          console.log("Sources", newSources)
+        }
+      }).finally(() => {
+        setFileUpdatePending(false)
+        setPendingFiles([])
+      });
     })
   }
 
@@ -27,14 +42,14 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
       </div>
 
       <ul>
-        {workspaceInfo.sources.map(source => (<li key={source.id}>{source.name}</li>))}
-        {!pending && workspaceInfo.sources.length == 0 && (
+        {sources.map(source => (<li key={source.id}>{source.name}</li>))}
+        {!fileUpdatePending && sources.length == 0 && (
           <div className="flex flex-col items-center">
             <ViewNoneIcon height={"24px"} width={"24px"} />
             <p>No sources added yet</p>
           </div>
         )}
-        {pending && pendingFiles.map(f => (<li className="animate-pulse">{f}</li>))}
+        {fileUpdatePending && pendingFiles.map((f, id) => (<li key={id} className="animate-pulse">{f}</li>))}
       </ul>
     </aside>
   )
