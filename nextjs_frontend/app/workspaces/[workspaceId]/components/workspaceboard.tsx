@@ -1,6 +1,8 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react"
+import { PaperPlaneIcon } from "@radix-ui/react-icons"; 
 
 export function WorkspaceBoard({ title }: { title: string }) {
   const [wTitle, setWTitle] = useState(title);
@@ -13,8 +15,9 @@ export function WorkspaceBoard({ title }: { title: string }) {
         <ChatMessage message="This is a user query" role={ChatRole.HUMAN}/>
       </div>
 
-      <div>
-        <p>Chat input area</p>
+      <div className="bg-muted text-muted-foreground p-2 rounded-md flex gap-1">
+        <Input placeholder="Your query goes here...."/>
+        <Button className="flex gap-1">Send <PaperPlaneIcon /></Button>
       </div>
     </div>
   )
