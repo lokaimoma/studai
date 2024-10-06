@@ -47,7 +47,7 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
       <ul className="flex flex-col gap-1">
         {sources.map(source => (
           <div className="flex items-center gap-2 p-1 border-2 rounded">
-            <li className="truncate" key={source.id}>{source.name}</li>
+            <li className="truncate w-[80%]" key={source.id}>{source.name}</li>
             <CheckboxIcon />
           </div>
         ))}

@@ -1,6 +1,7 @@
 import { Source } from "@/app/actions/home";
 import { SidebarClose } from "lucide-react";
 import { SourceSideBar } from "./components/sidebar";
+import { WorkspaceBoard } from "./components/workspaceboard";
 
 export type WorkspacePayload = {
   title: string;
@@ -23,14 +24,14 @@ async function Page({ params }: { params: { workspaceId: string } }) {
   const workspaceInfo: WorkspacePayload = await response.json();
 
   return (
-    <div className="flex gap-7 flex-wrap h-screen overflow-hidden">
+    <div className="grid grid-cols-[auto_1fr] gap-3 h-screen">
       <div className="w-[200px] h-full">
         <SourceSideBar workspaceId={params.workspaceId} workspaceInfo={workspaceInfo} />
       </div>
 
-      <div>
-        <h3>{workspaceInfo.title}</h3>
-      </div>
+      <div className="">
+        <WorkspaceBoard title={workspaceInfo.title}/>
+        </div>
     </div>
   )
 }
