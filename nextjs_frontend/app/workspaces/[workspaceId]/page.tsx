@@ -19,13 +19,14 @@ async function Page({ params }: { params: { workspaceId: string } }) {
       </>
     )
   }
-  console.log(await response.text())
-  console.log("Headers", response.headers)
-  const workspaceInfo: WorkspacePayload = {title: "", sources: []};
+
+  const workspaceInfo: WorkspacePayload = await response.json();
 
   return (
-    <div className="flex gap-7 flex-wrap">
-      <SourceSideBar workspaceId={params.workspaceId} workspaceInfo={workspaceInfo}/>
+    <div className="flex gap-7 flex-wrap h-screen overflow-hidden">
+      <div className="w-[200px] h-full">
+        <SourceSideBar workspaceId={params.workspaceId} workspaceInfo={workspaceInfo} />
+      </div>
 
       <div>
         <h3>{workspaceInfo.title}</h3>

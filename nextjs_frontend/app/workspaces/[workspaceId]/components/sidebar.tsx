@@ -1,5 +1,5 @@
 "use client";
-import { ViewNoneIcon } from "@radix-ui/react-icons";
+import { ViewNoneIcon, CheckboxIcon } from "@radix-ui/react-icons";
 import { useState, useTransition } from "react";
 import { uploadSources } from "../actions";
 import { AddSourceDialog } from "./AddSourceDialog";
@@ -38,14 +38,19 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
   }
 
   return (
-    <aside>
+    <aside className="p-2 h-full flex flex-col gap-8 bg-muted">
       <div className="flex gap-2 items-center justify-between">
         <header className="font-bold">Sources</header>
         <AddSourceDialog workspaceId={workspaceId} onUploadSource={onUploadSources} />
       </div>
 
-      <ul>
-        {sources.map(source => (<li key={source.id}>{source.name}</li>))}
+      <ul className="flex flex-col gap-1">
+        {sources.map(source => (
+          <div className="flex items-center gap-2 p-1 border-2 rounded">
+            <li className="truncate" key={source.id}>{source.name}</li>
+            <CheckboxIcon />
+          </div>
+        ))}
         {!fileUpdatePending && sources.length == 0 && (
           <div className="flex flex-col items-center">
             <ViewNoneIcon height={"24px"} width={"24px"} />
