@@ -24,12 +24,12 @@ async function Page({ params }: { params: { workspaceId: string } }) {
   const workspaceInfo: WorkspacePayload = await response.json();
 
   return (
-    <div className="grid grid-cols-[auto_1fr] gap-3 h-screen">
+    <div className="grid grid-cols-[auto_1fr] gap-3 h-screen overflow-hidden">
       <div className="w-[200px] h-full">
         <SourceSideBar workspaceId={params.workspaceId} workspaceInfo={workspaceInfo} />
       </div>
 
-      <div className="">
+      <div className="h-screen">
         <WorkspaceBoard title={workspaceInfo.title}/>
         </div>
     </div>

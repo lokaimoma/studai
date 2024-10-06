@@ -2,11 +2,31 @@
 import { Input } from "@/components/ui/input";
 import { useState } from "react"
 
-export function WorkspaceBoard({title}: {title: string}) {
+export function WorkspaceBoard({ title }: { title: string }) {
   const [wTitle, setWTitle] = useState(title);
   return (
-      <div className="h-full p-1">
-        <input className="p-2 rounded-md font-semibold text-xl border-2 border-muted w-full" value={wTitle} onChange={(e) => setWTitle(e.target.value)}/>
+    <div className="p-1 grid grid-rows-[auto_1fr_auto] gap-4 h-full">
+      <input className="p-2 rounded-md font-semibold text-xl border-2 border-muted w-full" value={wTitle} onChange={(e) => setWTitle(e.target.value)} />
+
+      <div className="flex flex-col gap-2 bg-accent text-accent-foreground p-3 rounded-lg overflow-scroll">
+        <ChatMessage message="This is an AI message"/>
+        <ChatMessage message="This is a user query" role={ChatRole.HUMAN}/>
       </div>
+
+      <div>
+        <p>Chat input area</p>
+      </div>
+    </div>
+  )
+}
+
+enum ChatRole {
+  AI,
+  HUMAN,
+}
+
+function ChatMessage({ role = ChatRole.AI, message }: {role?: ChatRole; message: string}) {
+  return (
+    <p className={`bg-primary text-primary-foreground p-2 rounded-2xl ${role == ChatRole.HUMAN ? "w-[50%] rounded-br-none self-end bg-indigo-700": "w-[80%] rounded-bl-none"}`}>This is an AI message</p>
   )
 }
