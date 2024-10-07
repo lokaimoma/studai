@@ -1,3 +1,4 @@
+"use server";
 type Source = {
   id: string;
   name: string;
