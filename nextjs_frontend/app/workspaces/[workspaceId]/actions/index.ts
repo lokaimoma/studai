@@ -7,13 +7,13 @@ export async function uploadSources(formdata: FormData): Promise<Result<Source[]
     body: formdata,
   });
   if (!response.ok) {
-    return new Result<Source[]>(undefined, await response.text());
+    return { error: await response.text() } satisfies Result<Source[]>;
   }
-  const json = await response.json();
-  return new Result<Source[]>(json, undefined);
+  const json = await response.json() as Source[];
+  return { data: json } satisfies Result<Source[]>;
 }
 
-export async function chat(message: string, workspaceId: string, userId: string): Promise<Result<string>>{
+export async function chat(message: string, workspaceId: string, userId: string): Promise<Result<string>> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ai`, {
     method: "POST",
     headers: {
@@ -29,9 +29,9 @@ export async function chat(message: string, workspaceId: string, userId: string)
   const msg = await response.text()
 
   if (!response.ok) {
-    return new Result<string>(undefined, msg)
+    return { error: msg } satisfies Result<string>;
   }
 
-  return new Result<string>(msg, undefined)
+  return { data: msg } satisfies Result<string>
 }
 

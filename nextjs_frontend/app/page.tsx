@@ -14,7 +14,7 @@ export default function Home() {
   function onCreateWorkspace() {
     startTransition(async function() {
       const result = await createWorkspace();
-      if (result.isError) {
+      if (result.error) {
         setCreateOppSuc(false)
         setError(result.error)
         return;

@@ -20,7 +20,7 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
       setPendingFiles(documents.map(file => file.name))
       setFileUpdatePending(true)
       uploadSources(formdata).then(function(result) {
-        if (result.isError) {
+        if (result.error) {
           console.error("Request error", result.error)
           toast({ description: result.error, title: "Failed to upload source(s)", variant: "destructive" })
           return;
@@ -45,8 +45,8 @@ export function SourceSideBar({ workspaceId, workspaceInfo }: { workspaceId: str
       </div>
 
       <ul className="flex flex-col gap-1">
-        {sources.map(source => (
-          <div className="flex items-center gap-2 p-1 border-2 rounded">
+        {sources.map((source, idx) => (
+          <div key={idx} className="flex items-center gap-2 p-1 border-2 rounded">
             <li className="truncate w-[80%]" key={source.id}>{source.name}</li>
             <CheckboxIcon />
           </div>

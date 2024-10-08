@@ -10,27 +10,32 @@ type Workspace = {
   title: string;
 }
 
-class Result<T> {
-  private _data: T | undefined
-  private _error: any
-
-  constructor(data: T | undefined, error: any) {
-    this._data = data;
-    this._error = error;
-  }
-
-  public get data(): T | undefined {
-    return this._data
-  }
-
-  public get error(): any {
-    return this._error;
-  }
-
-  public get isError(): boolean {
-    return this._error != undefined
-  }
+type Result<T> = {
+  data?: T;
+  error?: string;
 }
+
+// class Result<T> {
+//   private _data: T | undefined
+//   private _error: any
+
+//   constructor(data: T | undefined, error: any) {
+//     this._data = data;
+//     this._error = error;
+//   }
+
+//   public get data(): T | undefined {
+//     return this._data
+//   }
+
+//   public get error(): any {
+//     return this._error;
+//   }
+
+//   public get isError(): boolean {
+//     return this._error != undefined
+//   }
+// }
 
 async function createWorkspace(): Promise<Result<Workspace>> {
   const payload = {
@@ -45,14 +50,13 @@ async function createWorkspace(): Promise<Result<Workspace>> {
   })
 
   if (!response.ok) {
-    return new Result<Workspace>(undefined, await response.text())
+    return { error: await response.text() } satisfies Result<Workspace>;
   }
 
   const json = await response.json()
 
-  const result = new Result<Workspace>(json, undefined);
-  return result;
+  const result = { data: json } satisfies Result<Workspace>; return result;
 }
 
-export {createWorkspace, Result};
-export type {Source}
+export { createWorkspace, };
+export type { Source, Result }
