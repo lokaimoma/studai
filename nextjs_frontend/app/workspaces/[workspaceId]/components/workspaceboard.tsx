@@ -1,17 +1,23 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FormEvent, useState, useTransition } from "react"
+import { FormEvent, useEffect, useRef, useState, useTransition } from "react"
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { chat } from "../actions";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function WorkspaceBoard({ title, workspaceId, userId }: { title: string, workspaceId: string, userId: string, }) {
+  const bottomChatRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const [wTitle, setWTitle] = useState(title);
   const [messages, setMessages] = useState<ChatMessageEntry[]>([]);
   const [query, setQuery] = useState('');
   const [pending, setPending] = useState(false);
+
+  useEffect(function() {
+    bottomChatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages])
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,7 +27,6 @@ export function WorkspaceBoard({ title, workspaceId, userId }: { title: string, 
       { message: query.toString() ?? '', role: ChatRole.HUMAN, id: '' } satisfies ChatMessageEntry
     ]
     setMessages(newConversations);
-
     chat(query, workspaceId, userId).then(result => {
       if (result.error) {
         toast({ title: "Error chating with StudAI", description: result.error, variant: "destructive" })
@@ -45,6 +50,14 @@ export function WorkspaceBoard({ title, workspaceId, userId }: { title: string, 
 
       <div className="flex flex-col gap-2 bg-accent text-accent-foreground p-3 rounded-lg overflow-scroll">
         {messages.map((msg, idx) => (<ChatMessage key={idx} msgEntry={msg} />))}
+        {pending && (
+          <div className="flex gap-1 w-max p-2 rounded-xl bg-primary/10">
+            <Skeleton className="w-2 h-2" />
+            <Skeleton className="w-2 h-2" />
+            <Skeleton className="w-2 h-2" />
+          </div>
+        )}
+        <div ref={bottomChatRef}></div>
       </div>
 
       <form onSubmit={onSubmit} className="bg-muted text-muted-foreground p-2 rounded-md flex gap-1">
