@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.koc.studai.ai.GenericResponse;
-
 @RestController
 @RequestMapping("/api/workspace")
 public class WorkspaceController {

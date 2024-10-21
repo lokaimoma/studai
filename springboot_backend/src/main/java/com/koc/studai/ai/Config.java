@@ -22,6 +22,7 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.filter.Filter;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 
 import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
@@ -35,14 +36,15 @@ public class Config {
 	private GoogleGeminiProperties geminiProperties;
 	@Autowired
 	private PgVectorDBProperties pgVectorDBProperties;
+	private String wsId;
 
 	@Bean
 	ChatLanguageModel huggingFaceChatLanguageModel() {
-//		HuggingFaceChatModel model = HuggingFaceChatModel.builder()
-//				.accessToken(hfProperties.getApiKey())
-//				.modelId(hfProperties.getModelId())
-//				.temperature(0.7)
-//				.build();
+		// HuggingFaceChatModel model = HuggingFaceChatModel.builder()
+		// .accessToken(hfProperties.getApiKey())
+		// .modelId(hfProperties.getModelId())
+		// .temperature(0.7)
+		// .build();
 		GoogleAiGeminiChatModel model = GoogleAiGeminiChatModel.builder().apiKey(geminiProperties.getApiKey())
 				.modelName(geminiProperties.getModelId()).temperature(0.5).build();
 		return model;
@@ -54,7 +56,7 @@ public class Config {
 				.port(pgVectorDBProperties.getPort()).user(pgVectorDBProperties.getUser())
 				.password(pgVectorDBProperties.getPassword()).database(pgVectorDBProperties.getDatabase())
 				.table(pgVectorDBProperties.getTable()).dimension(pgVectorDBProperties.getDimensionSize()).build();
-		
+
 		return embeddingStore;
 	}
 
@@ -90,18 +92,13 @@ public class Config {
 				.embeddingStore(embeddingStore).maxResults(5).minScore(0.6)
 				.dynamicFilter(query -> {
 					String userIdWorkspaceId = (String) query.metadata().chatMemoryId();
-					log.info("userIdWOrkspaceID 1st query: " + userIdWorkspaceId);
 					String[] idParts = userIdWorkspaceId.split(Assistant.USERiD_WORKSPACEID_SEP);
 					String userId = idParts[0];
-					return metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId);
-				})
-				.dynamicFilter(query -> {
-					String userIdWorkspaceId = (String) query.metadata().chatMemoryId();
-					log.info("userIdWOrkspaceID: " + userIdWorkspaceId);
-					String[] idParts = userIdWorkspaceId.split(Assistant.USERiD_WORKSPACEID_SEP);
-					log.info("ID PARTS: " + idParts.length);
-					String workspaceId = idParts[1];
-					return metadataKey(IntransitFile.WORKSPACE_ID_META_KEY).isEqualTo(workspaceId);
+					String wsId = idParts[1];
+					log.info("User Id: " + userId);
+					log.info("Workspace ID: " + wsId);
+					return Filter.and(metadataKey(IntransitFile.USER_ID_META_KEY).isEqualTo(userId),
+							metadataKey(IntransitFile.WORKSPACE_ID_META_KEY).isEqualTo(wsId));
 				})
 				.build();
 		EmbeddingStoreLoggingRetriever retriever2 = new EmbeddingStoreLoggingRetriever(retriever);
@@ -115,9 +112,10 @@ public class Config {
 				.chatLanguageModel(chatLanguageModel).build();
 		return assistant;
 	}
-	
+
 	@Bean
-	ConversationalRetrievalChain conversationalRetrievalChain(ChatLanguageModel model, RetrievalAugmentor retrievalAugmentor) {
+	ConversationalRetrievalChain conversationalRetrievalChain(ChatLanguageModel model,
+			RetrievalAugmentor retrievalAugmentor) {
 		ConversationalRetrievalChain chain = ConversationalRetrievalChain.builder()
 				.chatLanguageModel(model)
 				.retrievalAugmentor(retrievalAugmentor)

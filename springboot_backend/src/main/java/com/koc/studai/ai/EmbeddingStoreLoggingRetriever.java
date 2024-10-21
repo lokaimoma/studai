@@ -24,7 +24,7 @@ public class EmbeddingStoreLoggingRetriever implements ContentRetriever {
 		if (contents.size() == 0) {
 			logger.warn("No relevant documents found");
 		}else {
-			logger.info("Relevant documents found of size %d", contents.size());
+			logger.info("Relevant documents found of size " + contents.size());
 		}
 		return contents;
 	}
